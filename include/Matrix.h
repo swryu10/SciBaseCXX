@@ -31,6 +31,11 @@ class Matrix {
     /* constructor
      * (with number of rows and columns) */
     Matrix(int num_in_row, int num_in_col) {
+        num_row_ = 0;
+        num_col_ = 0;
+
+        initialized_ = false;
+
         init(num_in_row, num_in_col, NULL);
 
         return;
@@ -95,6 +100,8 @@ class Matrix {
     void init(int num_in_row,
               int num_in_col,
               CNumber **mtx_in) {
+        reset();
+
         if (num_in_row < 1 ||
             num_in_col < 1) {
             return;
@@ -214,7 +221,6 @@ class Matrix {
                 }
             }
 
-            reset();
             init(ncol_prev, nrow_prev, mtx_src);
 
             del_array(ncol_prev, nrow_prev, mtx_src);
