@@ -32,9 +32,7 @@ class Vector4 {
      * (copy) */
     Vector4(const Vector4 &vec_src) {
         vec_t_ = vec_src.vec_t_;
-        vec_x_[0] = vec_src.vec_x_[0];
-        vec_x_[1] = vec_src.vec_x_[1];
-        vec_x_[2] = vec_src.vec_x_[2];
+        vec_x_ = vec_src.vec_x_;
 
         return;
     }
@@ -44,9 +42,7 @@ class Vector4 {
 
     Vector4 &operator=(const Vector4 &vec_src) {
         vec_t_ = vec_src.vec_t_;
-        vec_x_[0] = vec_src.vec_x_[0];
-        vec_x_[1] = vec_src.vec_x_[1];
-        vec_x_[2] = vec_src.vec_x_[2];
+        vec_x_ = vec_src.vec_x_;
 
         return *this;
     }
@@ -145,8 +141,8 @@ class Vector4 {
      * assuming the mostly-negative Minkowski metric */
     friend double operator*(Vector4 vec1, Vector4 vec2) {
         double prod =
-            vec1.vec_t_ * vec2.vec_t -
-            vec1.vec_x_ * vec2_vec_x;
+            vec1.vec_t_ * vec2.vec_t_ -
+            vec1.vec_x_ * vec2.vec_x_;
 
         return prod;
     }
