@@ -3,6 +3,8 @@
 
 #include<vector>
 
+/* 3-dimensional vector
+ * in Euclidean space */
 class Vector3 {
   private :
 
@@ -122,9 +124,9 @@ class Vector3 {
     // inner product
     friend double operator*(Vector3 vec1, Vector3 vec2) {
         double prod =
-        vec1.vec_[0] * vec2.vec_[0] +
-        vec1.vec_[1] * vec2.vec_[1] +
-        vec1.vec_[2] * vec2.vec_[2];
+            vec1.vec_[0] * vec2.vec_[0] +
+            vec1.vec_[1] * vec2.vec_[1] +
+            vec1.vec_[2] * vec2.vec_[2];
 
         return prod;
     }
