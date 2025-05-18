@@ -55,8 +55,7 @@ class Matrix {
         mtx_ = new_array(num_row_, num_col_);
         for (int ir = 1; ir <= num_row_; ir++) {
             for (int ic = 1; ic <= num_col_; ic++) {
-                mtx_[ir][ic][0] = mtx_src.mtx_[ir][ic][0];
-                mtx_[ir][ic][1] = mtx_src.mtx_[ir][ic][1];
+                mtx_[ir][ic] = mtx_src.mtx_[ir][ic];
             }
         }
 
@@ -114,7 +113,6 @@ class Matrix {
         for (int ir = 1; ir <= num_row_; ir++) {
             for (int ic = 1; ic <= num_col_; ic++) {
                 if (mtx_in != NULL) {
-                    mtx_[ir][ic] = mtx_in[ir][ic];
                     mtx_[ir][ic] = mtx_in[ir][ic];
                 } else {
                     mtx_[ir][ic][0] = 0.;
@@ -266,8 +264,8 @@ class Matrix {
         return;
     }
 
-    friend Matrix operator+(double nd, Matrix mtx) {
-        Matrix mtx_ret = mtx;
+    friend Matrix operator+(double num1, Matrix mtx2) {
+        Matrix mtx_ret = mtx2;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
 
@@ -279,14 +277,14 @@ class Matrix {
 
         for (int ir = 1; ir <= nrow; ir++) {
             mtx_ret[ir][ir][0] =
-                nd + mtx_ret[ir][ir][0];
+                num1 + mtx_ret[ir][ir][0];
         }
 
         return mtx_ret;
     }
 
-    friend Matrix operator+(Matrix mtx, double nd) {
-        Matrix mtx_ret = mtx;
+    friend Matrix operator+(Matrix mtx1, double num2) {
+        Matrix mtx_ret = mtx1;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
 
@@ -298,14 +296,52 @@ class Matrix {
 
         for (int ir = 1; ir <= nrow; ir++) {
             mtx_ret[ir][ir][0] =
-                mtx_ret[ir][ir][0] + nd;
+                mtx_ret[ir][ir][0] + num2;
         }
 
         return mtx_ret;
     }
 
-    friend Matrix operator-(double nd, Matrix mtx) {
-        Matrix mtx_ret = mtx;
+    friend Matrix operator+(CNumber num1, Matrix mtx2) {
+        Matrix mtx_ret = mtx2;
+        if (!mtx_ret.is_square()) {
+            mtx_ret.reset();
+
+            return mtx_ret;
+        }
+
+        int nrow = mtx_ret.get_num_row();
+        int ncol = mtx_ret.get_num_col();
+
+        for (int ir = 1; ir <= nrow; ir++) {
+            mtx_ret[ir][ir] =
+                num1 + mtx_ret[ir][ir];
+        }
+
+        return mtx_ret;
+    }
+
+    friend Matrix operator+(Matrix mtx1, CNumber num2) {
+        Matrix mtx_ret = mtx1;
+        if (!mtx_ret.is_square()) {
+            mtx_ret.reset();
+
+            return mtx_ret;
+        }
+
+        int nrow = mtx_ret.get_num_row();
+        int ncol = mtx_ret.get_num_col();
+
+        for (int ir = 1; ir <= nrow; ir++) {
+            mtx_ret[ir][ir] =
+                mtx_ret[ir][ir] + num2;
+        }
+
+        return mtx_ret;
+    }
+
+    friend Matrix operator-(double num1, Matrix mtx2) {
+        Matrix mtx_ret = mtx2;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
 
@@ -322,7 +358,7 @@ class Matrix {
                 mtx_ret[ir][ir][1] =
                     -mtx_ret[ir][ir][1];
                 if (ir == ic) {
-                    mtx_ret[ir][ir][0] += nd;
+                    mtx_ret[ir][ir][0] += num1;
                 }
             }
         }
@@ -330,8 +366,8 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator-(Matrix mtx, double nd) {
-        Matrix mtx_ret = mtx;
+    friend Matrix operator-(Matrix mtx1, double num2) {
+        Matrix mtx_ret = mtx1;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
 
@@ -343,7 +379,53 @@ class Matrix {
 
         for (int ir = 1; ir <= nrow; ir++) {
             mtx_ret[ir][ir][0] =
-                mtx_ret[ir][ir][0] - nd;
+                mtx_ret[ir][ir][0] - num2;
+        }
+
+        return mtx_ret;
+    }
+
+    friend Matrix operator-(CNumber num1, Matrix mtx2) {
+        Matrix mtx_ret = mtx2;
+        if (!mtx_ret.is_square()) {
+            mtx_ret.reset();
+
+            return mtx_ret;
+        }
+
+        int nrow = mtx_ret.get_num_row();
+        int ncol = mtx_ret.get_num_col();
+
+        for (int ir = 1; ir <= nrow; ir++) {
+            for (int ic = 1; ic <= ncol; ic++) {
+                mtx_ret[ir][ir][0] =
+                    -mtx_ret[ir][ir][0];
+                mtx_ret[ir][ir][1] =
+                    -mtx_ret[ir][ir][1];
+                if (ir == ic) {
+                    mtx_ret[ir][ir] =
+                        mtx_ret[ir][ir] + num1;
+                }
+            }
+        }
+
+        return mtx_ret;
+    }
+
+    friend Matrix operator-(Matrix mtx1, CNumber num2) {
+        Matrix mtx_ret = mtx1;
+        if (!mtx_ret.is_square()) {
+            mtx_ret.reset();
+
+            return mtx_ret;
+        }
+
+        int nrow = mtx_ret.get_num_row();
+        int ncol = mtx_ret.get_num_col();
+
+        for (int ir = 1; ir <= nrow; ir++) {
+            mtx_ret[ir][ir] =
+                mtx_ret[ir][ir] - num2;
         }
 
         return mtx_ret;
@@ -356,8 +438,7 @@ class Matrix {
 
         for (int ir = 1; ir <= nrow; ir++) {
             for (int ic = 1; ic <= ncol; ic++) {
-                mtx_ret[ir][ic][0] = fac * mtx_ret[ir][ic][0];
-                mtx_ret[ir][ic][1] = fac * mtx_ret[ir][ic][1];
+                mtx_ret[ir][ic] = fac * mtx_ret[ir][ic];
             }
         }
 
@@ -371,8 +452,35 @@ class Matrix {
 
         for (int ir = 1; ir <= nrow; ir++) {
             for (int ic = 1; ic <= ncol; ic++) {
-                mtx_ret[ir][ic][0] = mtx_ret[ir][ic][0] * fac;
-                mtx_ret[ir][ic][1] = mtx_ret[ir][ic][1] * fac;
+                mtx_ret[ir][ic] = mtx_ret[ir][ic] * fac;
+            }
+        }
+
+        return mtx_ret;
+    }
+
+    friend Matrix operator*(CNumber fac, Matrix mtx) {
+        Matrix mtx_ret = mtx;
+        int nrow = mtx_ret.get_num_row();
+        int ncol = mtx_ret.get_num_col();
+
+        for (int ir = 1; ir <= nrow; ir++) {
+            for (int ic = 1; ic <= ncol; ic++) {
+                mtx_ret[ir][ic] = fac * mtx_ret[ir][ic];
+            }
+        }
+
+        return mtx_ret;
+    }
+
+    friend Matrix operator*(Matrix mtx, CNumber fac) {
+        Matrix mtx_ret = mtx;
+        int nrow = mtx_ret.get_num_row();
+        int ncol = mtx_ret.get_num_col();
+
+        for (int ir = 1; ir <= nrow; ir++) {
+            for (int ic = 1; ic <= ncol; ic++) {
+                mtx_ret[ir][ic] = mtx_ret[ir][ic] * fac;
             }
         }
 
@@ -386,8 +494,49 @@ class Matrix {
 
         for (int ir = 1; ir <= nrow; ir++) {
             for (int ic = 1; ic <= ncol; ic++) {
-                mtx_ret[ir][ic][0] = mtx_ret[ir][ic][0] / fac;
-                mtx_ret[ir][ic][1] = mtx_ret[ir][ic][1] / fac;
+                mtx_ret[ir][ic] = mtx_ret[ir][ic] / fac;
+            }
+        }
+
+        return mtx_ret;
+    }
+
+    friend Matrix operator/(Matrix mtx, CNumber fac) {
+        Matrix mtx_ret = mtx;
+        int nrow = mtx_ret.get_num_row();
+        int ncol = mtx_ret.get_num_col();
+
+        for (int ir = 1; ir <= nrow; ir++) {
+            for (int ic = 1; ic <= ncol; ic++) {
+                mtx_ret[ir][ic] = mtx_ret[ir][ic] / fac;
+            }
+        }
+
+        return mtx_ret;
+    }
+
+    friend Matrix operator*(Matrix mtx1, Matrix mtx2) {
+        int nrow = mtx1.get_num_row();
+        int ncol_mid = mtx1.get_num_col();
+
+        int nrow_mid = mtx2.get_num_row();
+        int ncol = mtx2.get_num_col();
+
+        Matrix mtx_ret;
+        if (ncol_mid != nrow_mid) {
+            return mtx_ret;
+        }
+
+        mtx_ret.init(nrow, ncol, NULL);
+        for (int ir = 1; ir <= nrow; ir++) {
+            for (int ic = 1; ic <= ncol; ic++) {
+                mtx_ret[ir][ic][0] = 0.;
+                mtx_ret[ir][ic][1] = 0.;
+
+                for (int jrc = 1; jrc <= ncol_mid; jrc++) {
+                    mtx_ret[ir][ic] = mtx_ret[ir][ic] +
+                        mtx1[ir][jrc] * mtx2[jrc][ic];
+                }
             }
         }
 
