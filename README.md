@@ -15,3 +15,16 @@ One can use `export` and `setenv` commands for **bash/zsh** and **tcsh/csh** she
 $ export CPLUS_INCLUDE_PATH=[directory for the SciBaseCXX local repo]/include:$CPLUS_INCLUDE_PATH
 $ setenv CPLUS_INCLUDE_PATH [directory for the SciBaseCXX local repo]/include:$CPLUS_INCLUDE_PATH
 ```
+* **CMake** \
+In the case of building with **cmake**, it is also possible to import the library via `FetchContent` from the public repository.
+If one has a project `proj_foo`, the following statements can be added in CMakeLists.txt to get the header files available.
+```
+include(FetchContent)
+FetchContent_Declare(
+    SciBaseCXX
+    GIT_REPOSITORY https://github.com/swryu10/SciBaseCXX.git
+    GIT_TAG origin/main
+)
+FetchContent_MakeAvailable(SciBaseCXX)
+target_include_directories(proj_foo PUBLIC ${FETCHCONTENT_BASE_DIR}/scibasecxx-src/include)
+```
