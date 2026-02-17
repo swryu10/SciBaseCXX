@@ -94,7 +94,13 @@ class Matrix {
         return *this;
     }
 
-    CNumber *operator[](int ir) {return mtx_[ir];}
+    CNumber *operator[](int ir) const {
+        if (ir < 1 || ir > num_row_) {
+            return nullptr;
+        }
+
+        return mtx_[ir];
+    }
 
     void init(int num_in_row,
               int num_in_col,
@@ -128,10 +134,10 @@ class Matrix {
         return;
     }
 
-    int get_num_row() {return num_row_;}
-    int get_num_col() {return num_col_;}
+    int get_num_row() const {return num_row_;}
+    int get_num_col() const {return num_col_;}
 
-    bool is_square() {
+    bool is_square() const {
         return flag_square_;
     }
 
@@ -264,7 +270,7 @@ class Matrix {
         return;
     }
 
-    friend Matrix operator+(double num1, Matrix mtx2) {
+    friend Matrix operator+(double num1, const Matrix &mtx2) {
         Matrix mtx_ret = mtx2;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
@@ -283,7 +289,7 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator+(Matrix mtx1, double num2) {
+    friend Matrix operator+(const Matrix &mtx1, double num2) {
         Matrix mtx_ret = mtx1;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
@@ -302,7 +308,8 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator+(CNumber num1, Matrix mtx2) {
+    friend Matrix operator+(const CNumber &num1,
+                            const Matrix &mtx2) {
         Matrix mtx_ret = mtx2;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
@@ -321,7 +328,8 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator+(Matrix mtx1, CNumber num2) {
+    friend Matrix operator+(const Matrix &mtx1,
+                            const CNumber &num2) {
         Matrix mtx_ret = mtx1;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
@@ -340,7 +348,7 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator-(double num1, Matrix mtx2) {
+    friend Matrix operator-(double num1, const Matrix &mtx2) {
         Matrix mtx_ret = mtx2;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
@@ -366,7 +374,7 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator-(Matrix mtx1, double num2) {
+    friend Matrix operator-(const Matrix &mtx1, double num2) {
         Matrix mtx_ret = mtx1;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
@@ -385,7 +393,8 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator-(CNumber num1, Matrix mtx2) {
+    friend Matrix operator-(const CNumber &num1,
+                            const Matrix &mtx2) {
         Matrix mtx_ret = mtx2;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
@@ -412,7 +421,8 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator-(Matrix mtx1, CNumber num2) {
+    friend Matrix operator-(const Matrix &mtx1,
+                            const CNumber &num2) {
         Matrix mtx_ret = mtx1;
         if (!mtx_ret.is_square()) {
             mtx_ret.reset();
@@ -431,7 +441,7 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator*(double fac, Matrix mtx) {
+    friend Matrix operator*(double fac, const Matrix &mtx) {
         Matrix mtx_ret = mtx;
         int nrow = mtx_ret.get_num_row();
         int ncol = mtx_ret.get_num_col();
@@ -445,7 +455,7 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator*(Matrix mtx, double fac) {
+    friend Matrix operator*(const Matrix &mtx, double fac) {
         Matrix mtx_ret = mtx;
         int nrow = mtx_ret.get_num_row();
         int ncol = mtx_ret.get_num_col();
@@ -459,7 +469,8 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator*(CNumber fac, Matrix mtx) {
+    friend Matrix operator*(const CNumber &fac,
+                            const Matrix &mtx) {
         Matrix mtx_ret = mtx;
         int nrow = mtx_ret.get_num_row();
         int ncol = mtx_ret.get_num_col();
@@ -473,7 +484,7 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator*(Matrix mtx, CNumber fac) {
+    friend Matrix operator*(const Matrix &mtx, CNumber fac) {
         Matrix mtx_ret = mtx;
         int nrow = mtx_ret.get_num_row();
         int ncol = mtx_ret.get_num_col();
@@ -487,7 +498,7 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator/(Matrix mtx, double fac) {
+    friend Matrix operator/(const Matrix &mtx, double fac) {
         Matrix mtx_ret = mtx;
         int nrow = mtx_ret.get_num_row();
         int ncol = mtx_ret.get_num_col();
@@ -501,7 +512,7 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator/(Matrix mtx, CNumber fac) {
+    friend Matrix operator/(const Matrix &mtx, CNumber fac) {
         Matrix mtx_ret = mtx;
         int nrow = mtx_ret.get_num_row();
         int ncol = mtx_ret.get_num_col();
@@ -515,7 +526,8 @@ class Matrix {
         return mtx_ret;
     }
 
-    friend Matrix operator*(Matrix mtx1, Matrix mtx2) {
+    friend Matrix operator*(const Matrix &mtx1,
+                            const Matrix &mtx2) {
         int nrow = mtx1.get_num_row();
         int ncol_mid = mtx1.get_num_col();
 

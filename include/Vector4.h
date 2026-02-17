@@ -57,7 +57,21 @@ class Vector4 {
         }
     }
 
+    double operator[](int i) const {
+        if (i == 0) {
+            return vec_t_;
+        } else if (i == 3) {
+            return vec_x_[0];
+        } else {
+            return vec_x_[i];
+        }
+    }
+
     void set(int i, double vx_in) {
+        if (i < 0 || i >= 4) {
+            return;
+        }
+
         if (i == 0) {
             vec_t_ = vx_in;
         } else if (i == 3) {
@@ -78,7 +92,11 @@ class Vector4 {
         return;
     }
 
-    void set(std::vector<double> &vec_in) {
+    void set(const std::vector<double> &vec_in) {
+        if (vec_in.size() != 4) {
+            return;
+        }
+
         vec_t_ = vec_in[0];
         vec_x_[0] = vec_in[3];
         vec_x_[1] = vec_in[1];
@@ -87,7 +105,11 @@ class Vector4 {
         return;
     }
 
-    double get(int i) {
+    double get(int i) const {
+        if (i < 0 || i >= 4) {
+            return 0.;
+        }
+
         if (i == 0) {
             return vec_t_;
         } else if (i == 3) {
@@ -97,7 +119,11 @@ class Vector4 {
         }
     }
 
-    friend Vector4 operator+(Vector4 vec1, Vector4 vec2) {
+    double get_t() const {return vec_t_;}
+    Vector3 get_x() const {return vec_x_;}
+
+    friend Vector4 operator+(const Vector4 &vec1,
+                             const Vector4 &vec2) {
         Vector4 vec_ret;
         vec_ret.vec_t_ = vec1.vec_t_ + vec2.vec_t_;
         vec_ret.vec_x_ = vec1.vec_x_ + vec2.vec_x_;
@@ -105,7 +131,8 @@ class Vector4 {
         return vec_ret;
     }
 
-    friend Vector4 operator-(Vector4 vec1, Vector4 vec2) {
+    friend Vector4 operator-(const Vector4 &vec1,
+                             const Vector4 &vec2) {
         Vector4 vec_ret;
         vec_ret.vec_t_ = vec1.vec_t_ - vec2.vec_t_;
         vec_ret.vec_x_ = vec1.vec_x_ - vec2.vec_x_;
@@ -113,7 +140,7 @@ class Vector4 {
         return vec_ret;
     }
 
-    friend Vector4 operator*(double fac, Vector4 vec) {
+    friend Vector4 operator*(double fac, const Vector4 &vec) {
         Vector4 vec_ret;
         vec_ret.vec_t_ = fac * vec.vec_t_;
         vec_ret.vec_x_ = fac * vec.vec_x_;
@@ -121,7 +148,7 @@ class Vector4 {
         return vec_ret;
     }
 
-    friend Vector4 operator*(Vector4 vec, double fac) {
+    friend Vector4 operator*(const Vector4 &vec, double fac) {
         Vector4 vec_ret;
         vec_ret.vec_t_ = vec.vec_t_ * fac;
         vec_ret.vec_x_ = vec.vec_x_ * fac;
@@ -129,7 +156,7 @@ class Vector4 {
         return vec_ret;
     }
 
-    friend Vector4 operator/(Vector4 vec, double fac) {
+    friend Vector4 operator/(const Vector4 &vec, double fac) {
         Vector4 vec_ret;
         vec_ret.vec_t_ = vec.vec_t_ / fac;
         vec_ret.vec_x_ = vec.vec_x_ / fac;
@@ -139,7 +166,8 @@ class Vector4 {
 
     /* inner product
      * assuming the mostly-negative Minkowski metric */
-    friend double operator*(Vector4 vec1, Vector4 vec2) {
+    friend double operator*(const Vector4 &vec1,
+                            const Vector4 &vec2) {
         double prod =
             vec1.vec_t_ * vec2.vec_t_ -
             vec1.vec_x_ * vec2.vec_x_;

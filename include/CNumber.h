@@ -47,6 +47,7 @@ class CNumber {
     }
 
     double &operator[](int i) {return z_[i];}
+    double operator[](int i) const {return z_[i];}
 
     void set(double *z_in) {
         z_[0] = z_in[0];
@@ -65,24 +66,24 @@ class CNumber {
     void set_re(double z_in_re) {z_[0] = z_in_re;}
     void set_im(double z_in_im) {z_[1] = z_in_im;}
 
-    double get_re() {return z_[0];}
-    double get_im() {return z_[1];}
+    double get_re() const {return z_[0];}
+    double get_im() const {return z_[1];}
 
-    double get_abs() {
+    double get_abs() const {
         double abs =
             sqrt(z_[0] * z_[0] + z_[1] * z_[1]);
 
         return abs;
     }
 
-    double get_abs2() {
+    double get_abs2() const {
         double abs2 =
             z_[0] * z_[0] + z_[1] * z_[1];
 
         return abs2;
     }
 
-    double get_ang_azi() {
+    double get_ang_azi() const {
         double abs = get_abs();
         double sign_azi = 1.;
         if (z_[1] < 0.) {
@@ -92,7 +93,7 @@ class CNumber {
         return sign_azi * acos(z_[0] / abs);
     }
 
-    CNumber get_conjugate() {
+    CNumber get_conjugate() const {
         CNumber cnum_ret;
         cnum_ret.z_[0] = z_[0];
         cnum_ret.z_[1] = -z_[1];
@@ -100,7 +101,7 @@ class CNumber {
         return cnum_ret;
     }
 
-    CNumber get_inverse() {
+    CNumber get_inverse() const {
         double abs2 = get_abs2();
 
         CNumber cnum_ret;
@@ -110,7 +111,7 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator+(double num1, CNumber cnum2) {
+    friend CNumber operator+(double num1, const CNumber &cnum2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] = num1 + cnum2.z_[0];
@@ -119,7 +120,7 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator+(CNumber cnum1, double num2) {
+    friend CNumber operator+(const CNumber &cnum1, double num2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] = cnum1.z_[0] + num2;
@@ -128,7 +129,8 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator+(CNumber cnum1, CNumber cnum2) {
+    friend CNumber operator+(const CNumber &cnum1,
+                             const CNumber &cnum2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] = cnum1.z_[0] + cnum2.z_[0];
@@ -137,7 +139,7 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator-(double num1, CNumber cnum2) {
+    friend CNumber operator-(double num1, const CNumber &cnum2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] = num1 - cnum2.z_[0];
@@ -146,7 +148,7 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator-(CNumber cnum1, double num2) {
+    friend CNumber operator-(const CNumber &cnum1, double num2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] = cnum1.z_[0] - num2;
@@ -155,7 +157,8 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator-(CNumber cnum1, CNumber cnum2) {
+    friend CNumber operator-(const CNumber &cnum1,
+                             const CNumber &cnum2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] = cnum1.z_[0] - cnum2.z_[0];
@@ -164,7 +167,7 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator*(double num1, CNumber cnum2) {
+    friend CNumber operator*(double num1, const CNumber &cnum2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] = num1 * cnum2.z_[0];
@@ -173,7 +176,7 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator*(CNumber cnum1, double num2) {
+    friend CNumber operator*(const CNumber &cnum1, double num2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] = cnum1.z_[0] * num2;
@@ -182,7 +185,8 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator*(CNumber cnum1, CNumber cnum2) {
+    friend CNumber operator*(const CNumber &cnum1,
+                             const CNumber &cnum2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] =
@@ -195,7 +199,7 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator/(double num1, CNumber cnum2) {
+    friend CNumber operator/(double num1, const CNumber &cnum2) {
         CNumber cnum_ret;
 
         double abs2_cnum2 = cnum2.get_abs2();
@@ -208,7 +212,7 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator/(CNumber cnum1, double num2) {
+    friend CNumber operator/(const CNumber &cnum1, double num2) {
         CNumber cnum_ret;
 
         cnum_ret.z_[0] = cnum1.z_[0] / num2;
@@ -217,7 +221,8 @@ class CNumber {
         return cnum_ret;
     }
 
-    friend CNumber operator/(CNumber cnum1, CNumber cnum2) {
+    friend CNumber operator/(const CNumber &cnum1,
+                             const CNumber &cnum2) {
         CNumber cnum_ret;
 
         double abs2_cnum2 = cnum2.get_abs2();
@@ -233,7 +238,7 @@ class CNumber {
     }
 
     // integer power
-    friend CNumber operator^(CNumber cnum1, int n) {
+    friend CNumber operator^(const CNumber &cnum1, int n) {
         int sign = n > 0 ? 1 : -1;
         int abs_n = sign * n;
 

@@ -27,7 +27,6 @@ class Vector3 {
      * (copy) */
     Vector3(const Vector3 &vec_src) {
         vec_ = new double[3];
-
         vec_[0] = vec_src.vec_[0];
         vec_[1] = vec_src.vec_[1];
         vec_[2] = vec_src.vec_[2];
@@ -51,8 +50,13 @@ class Vector3 {
     }
 
     double &operator[](int ix) {return vec_[ix];}
+    double operator[](int ix) const {return vec_[ix];}
 
     void set(int ix, double vx_in) {
+        if (ix < 0 || ix >= 3) {
+            return;
+        }
+
         vec_[ix] = vx_in;
 
         return;
@@ -66,7 +70,11 @@ class Vector3 {
         return;
     }
 
-    void set(std::vector<double> &vec_in) {
+    void set(const std::vector<double> &vec_in) {
+        if (vec_in.size() != 3) {
+            return;
+        }
+
         vec_[0] = vec_in[0];
         vec_[1] = vec_in[1];
         vec_[2] = vec_in[2];
@@ -74,9 +82,16 @@ class Vector3 {
         return;
     }
 
-    double get(int ix) {return vec_[ix];}
+    double get(int ix) const {
+        if (ix < 0 || ix >= 3) {
+            return 0.;
+        }
 
-    friend Vector3 operator+(Vector3 vec1, Vector3 vec2) {
+        return vec_[ix];
+    }
+
+    friend Vector3 operator+(const Vector3 &vec1,
+                             const Vector3 &vec2) {
         Vector3 vec_ret;
         vec_ret.set(0, vec1.vec_[0] + vec2.vec_[0]);
         vec_ret.set(1, vec1.vec_[1] + vec2.vec_[1]);
@@ -85,7 +100,8 @@ class Vector3 {
         return vec_ret;
     }
 
-    friend Vector3 operator-(Vector3 vec1, Vector3 vec2) {
+    friend Vector3 operator-(const Vector3 &vec1,
+                             const Vector3 &vec2) {
         Vector3 vec_ret;
         vec_ret.set(0, vec1.vec_[0] - vec2.vec_[0]);
         vec_ret.set(1, vec1.vec_[1] - vec2.vec_[1]);
@@ -94,7 +110,7 @@ class Vector3 {
         return vec_ret;
     }
 
-    friend Vector3 operator*(double fac, Vector3 vec) {
+    friend Vector3 operator*(double fac, const Vector3 &vec) {
         Vector3 vec_ret;
         vec_ret.set(0, fac * vec.vec_[0]);
         vec_ret.set(1, fac * vec.vec_[1]);
@@ -103,7 +119,7 @@ class Vector3 {
         return vec_ret;
     }
 
-    friend Vector3 operator*(Vector3 vec, double fac) {
+    friend Vector3 operator*(const Vector3 &vec, double fac) {
         Vector3 vec_ret;
         vec_ret.set(0, vec.vec_[0] * fac);
         vec_ret.set(1, vec.vec_[1] * fac);
@@ -112,7 +128,7 @@ class Vector3 {
         return vec_ret;
     }
 
-    friend Vector3 operator/(Vector3 vec, double fac) {
+    friend Vector3 operator/(const Vector3 &vec, double fac) {
         Vector3 vec_ret;
         vec_ret.set(0, vec.vec_[0] / fac);
         vec_ret.set(1, vec.vec_[1] / fac);
@@ -122,7 +138,8 @@ class Vector3 {
     }
 
     // inner product
-    friend double operator*(Vector3 vec1, Vector3 vec2) {
+    friend double operator*(const Vector3 &vec1,
+                            const Vector3 &vec2) {
         double prod =
             vec1.vec_[0] * vec2.vec_[0] +
             vec1.vec_[1] * vec2.vec_[1] +
@@ -132,7 +149,8 @@ class Vector3 {
     }
 
     // exterior product
-    friend Vector3 operator^(Vector3 vec1, Vector3 vec2) {
+    friend Vector3 operator^(const Vector3 &vec1,
+                             const Vector3 &vec2) {
         Vector3 vec_ret;
         vec_ret[0] =
             vec1.vec_[1] * vec2.vec_[2] -
